@@ -49,7 +49,6 @@ def calculate_blank(data_list):
 def calculate_detection():
     global LoD, p_value_detection
     # 判断数据是否符合正态分布
-    # 读取测试结果（结果按列整理在txt文件中）并存入列表中
     data_list_LoD = []
     data_LoD = open(r"E:\New_Project\05_空白限与检测限计算\demo_loD.txt")
     for d in data_LoD.readlines():

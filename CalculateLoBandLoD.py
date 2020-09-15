@@ -47,7 +47,6 @@ def calculate_blank(data_list):
 
 # calculate limit of detection
 def calculate_detection():
-    print(LoB)
     global LoD, p_value_detection
     # 判断数据是否符合正态分布
     # 读取测试结果（结果按列整理在txt文件中）并存入列表中
@@ -60,21 +59,21 @@ def calculate_detection():
     df = pd.DataFrame(data_list_LoD,columns=["values"])
     print(df[0:7])
     # 正态分布判定
-    data_mean = df["values"].mean()  # 计算平均数
-    data_std = df["values"].std()  # 计算标准差
-    result = stats.kstest(df["values"],"norm",(data_mean,data_std))  # p-value > 0.05 即符合正态分布
+    data_lod_mean = df["values"].mean()  # 计算平均数
+    data_lod_std = df["values"].std()  # 计算标准差
+    result = stats.kstest(df["values"],"norm",(data_lod_mean,data_lod_std))  # p-value > 0.05 即符合正态分布
     p_value_detection = float(re.findall(r'0.\d+',str(result))[1])  # 提取K-Stest正态检验计算的P值
     if p_value_detection > 0.05:  # 判断是否符合正态分布并返回P值
         print("LoD数据符合正态分布,p-value:{}".format(p_value_detection))
     else:
         print("LoD数据不符合正态分布,p-value:{}".format(p_value_detection))
 
-    # 空白值计算
+    # 检出限计算
     if p_value_detection > 0.05:
         print("LoD数据符合正态分布")
         J = eval(input("请输入低浓度样本数:"))
         detection_cp = 1.645 / (1 - (1/(4*(len(data_list)-J))))
-        LoD = LoB + detection_cp * data_std  # LoB = M + cp * SD
+        LoD = LoB + detection_cp * data_lod_std  # LoB = M + cp * SD
         print("计算的LoD值:{}".format(LoB))
     else:
         print("LoD数据不符合正态分布")
